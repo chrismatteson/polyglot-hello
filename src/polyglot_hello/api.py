@@ -3,12 +3,14 @@ from __future__ import annotations
 import json
 import random
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Callable, List, Optional
+from importlib.abc import Traversable
 
 try:  # Python 3.9+
-    from importlib.resources import files as ir_files  # type: ignore[attr-defined]
-except Exception:  # Python 3.8 fallback
-    ir_files = None  # type: ignore[assignment]
+    from importlib.resources import files as _files
+    _ir_files: Optional[Callable[[str], Traversable]] = _files
+except Exception:
+    _ir_files = None
 
 
 @dataclass(frozen=True)
@@ -22,12 +24,12 @@ class Greeting:
 
 
 def _read_data_text() -> str:
-    if ir_files is not None:
-        data_path = ir_files("polyglot_hello").joinpath("data/greetings.json")
+    if _ir_files is not None:
+        data_path = _ir_files("polyglot_hello").joinpath("data/greetings.json")
         return data_path.read_text(encoding="utf-8")
     # Python 3.8: try importlib.resources.open_text using a package module
     try:
-        from importlib.resources import open_text  # type: ignore
+        from importlib.resources import open_text
 
         with open_text("polyglot_hello.data", "greetings.json", encoding="utf-8") as f:
             return f.read()

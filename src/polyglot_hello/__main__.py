@@ -71,6 +71,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                     "hello": g.hello,
                     "hello_world": g.hello_world,
                     "family_path": g.family_path,
+                    "family_str": " > ".join(g.family_path) if g.family_path else "",
                 }
                 for g in results
             ]
@@ -80,8 +81,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                 for item in payload:
                     print(
                         f"{item['index']:03d} | {item['name']} ({item['code']}) | "
-                        f"{item['hello']} / {item['hello_world']} | "
-                        f"{(' > '.join(item['family_path'])) if item['family_path'] else ''}"
+                        f"{item['hello']} / {item['hello_world']} | {item['family_str']}"
                     )
             return 0
 
@@ -96,6 +96,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                     "hello": g.hello,
                     "hello_world": g.hello_world,
                     "family_path": g.family_path,
+                    "family_str": " > ".join(g.family_path) if g.family_path else "",
                 }
                 for g in results
             ]
@@ -105,8 +106,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                 for item in payload:
                     print(
                         f"{item['index']:03d} | {item['name']} ({item['code']}) | "
-                        f"{item['hello']} / {item['hello_world']} | "
-                        f"{(' > '.join(item['family_path'])) if item['family_path'] else ''}"
+                        f"{item['hello']} / {item['hello_world']} | {item['family_str']}"
                     )
             return 0
 
@@ -121,6 +121,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                     "hello": g.hello,
                     "hello_world": g.hello_world,
                     "family_path": g.family_path,
+                    "family_str": " > ".join(g.family_path) if g.family_path else "",
                 }
                 for g in results
             ]
@@ -130,8 +131,7 @@ def main(argv: Optional[list[str]] = None) -> int:
                 for item in payload:
                     print(
                         f"{item['index']:03d} | {item['name']} ({item['code']}) | "
-                        f"{item['hello']} / {item['hello_world']} | "
-                        f"{(' > '.join(item['family_path'])) if item['family_path'] else ''}"
+                        f"{item['hello']} / {item['hello_world']} | {item['family_str']}"
                     )
             return 0
 

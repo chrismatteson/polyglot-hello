@@ -10,6 +10,8 @@ from .api import (
     say_hello_world,
     list_languages,
     search,
+    filter_by_family,
+    filter_by_code_prefix,
 )
 
 __all__ = [
@@ -22,6 +24,8 @@ __all__ = [
     "say_hello_world",
     "list_languages",
     "search",
+    "filter_by_family",
+    "filter_by_code_prefix",
 ]
 
 __version__ = "0.1.0"

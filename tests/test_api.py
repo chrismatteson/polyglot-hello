@@ -11,6 +11,8 @@ from polyglot_hello import (
     say_hello,
     say_hello_world,
     search,
+    filter_by_family,
+    filter_by_code_prefix,
 )
 
 
@@ -45,5 +47,12 @@ def test_random_and_search():
     assert isinstance(g.hello, str) and g.hello
     results = search("hola")
     assert any(r.name.lower().startswith("spanish") for r in results)
+
+
+def test_family_and_prefix_filters():
+    germanic = filter_by_family("Germanic")
+    assert any(x.code == "en" for x in germanic)
+    a_prefix = filter_by_code_prefix("a")
+    assert any(x.code.startswith("a") for x in a_prefix)
 
 

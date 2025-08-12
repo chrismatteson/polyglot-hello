@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "polyglot-hello"
-version = "0.1.2"
+version = "0.1.3"
 description = "Hello and Hello World in 200+ languages, with simple APIs by name, code, or index."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -46,27 +46,18 @@ dev = [
 ]
 
 [tool.hatch.build]
-packages = ["src/polyglot_hello"]
-include = [
-  "src/polyglot_hello/**/*.py",
-  "src/polyglot_hello/data/greetings.json",
-  "README.md",
-  "LICENSE",
-]
-
-[tool.hatch.build.targets.sdist]
-include = [
-  "src/polyglot_hello/**/*.py",
-  "src/polyglot_hello/data/greetings.json",
-  "README.md",
-  "LICENSE",
-]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/polyglot_hello"]
 include = [
-  "src/polyglot_hello/**/*.py",
   "src/polyglot_hello/data/greetings.json",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/polyglot_hello/**",
+  "README.md",
+  "LICENSE",
 ]
 
 [tool.ruff]

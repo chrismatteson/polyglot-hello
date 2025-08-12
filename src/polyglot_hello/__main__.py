@@ -10,6 +10,8 @@ from .api import (
     say_hello,
     say_hello_world,
     search,
+    filter_by_family,
+    filter_by_code_prefix,
 )
 
 
@@ -32,6 +34,14 @@ def main(argv: Optional[list[str]] = None) -> int:
     p_search = sub.add_parser("search", help="Search by substring across names/codes/translations")
     p_search.add_argument("query", help="query string")
     p_search.add_argument("--json", action="store_true", help="Output as JSON")
+
+    p_family = sub.add_parser("family", help="List greetings for a given family (e.g., Germanic)")
+    p_family.add_argument("family", help="family name or substring")
+    p_family.add_argument("--json", action="store_true", help="Output as JSON")
+
+    p_prefix = sub.add_parser("prefix", help="List greetings where a code starts with a prefix")
+    p_prefix.add_argument("prefix", help="code prefix (e.g., 'a', 'pt', 'zh-")
+    p_prefix.add_argument("--json", action="store_true", help="Output as JSON")
 
     args = parser.parse_args(argv)
 
@@ -60,6 +70,8 @@ def main(argv: Optional[list[str]] = None) -> int:
                     "codes": g.codes,
                     "hello": g.hello,
                     "hello_world": g.hello_world,
+                    "family_path": g.family_path,
+                    "family_str": " > ".join(g.family_path) if g.family_path else "",
                 }
                 for g in results
             ]
@@ -69,7 +81,57 @@ def main(argv: Optional[list[str]] = None) -> int:
                 for item in payload:
                     print(
                         f"{item['index']:03d} | {item['name']} ({item['code']}) | "
-                        f"{item['hello']} / {item['hello_world']}"
+                        f"{item['hello']} / {item['hello_world']} | {item['family_str']}"
+                    )
+            return 0
+
+        if args.cmd == "family":
+            results = filter_by_family(args.family)
+            payload = [
+                {
+                    "index": g.index,
+                    "name": g.name,
+                    "code": g.code,
+                    "codes": g.codes,
+                    "hello": g.hello,
+                    "hello_world": g.hello_world,
+                    "family_path": g.family_path,
+                    "family_str": " > ".join(g.family_path) if g.family_path else "",
+                }
+                for g in results
+            ]
+            if getattr(args, "json", False):
+                print(json.dumps(payload, ensure_ascii=False))
+            else:
+                for item in payload:
+                    print(
+                        f"{item['index']:03d} | {item['name']} ({item['code']}) | "
+                        f"{item['hello']} / {item['hello_world']} | {item['family_str']}"
+                    )
+            return 0
+
+        if args.cmd == "prefix":
+            results = filter_by_code_prefix(args.prefix)
+            payload = [
+                {
+                    "index": g.index,
+                    "name": g.name,
+                    "code": g.code,
+                    "codes": g.codes,
+                    "hello": g.hello,
+                    "hello_world": g.hello_world,
+                    "family_path": g.family_path,
+                    "family_str": " > ".join(g.family_path) if g.family_path else "",
+                }
+                for g in results
+            ]
+            if getattr(args, "json", False):
+                print(json.dumps(payload, ensure_ascii=False))
+            else:
+                for item in payload:
+                    print(
+                        f"{item['index']:03d} | {item['name']} ({item['code']}) | "
+                        f"{item['hello']} / {item['hello_world']} | {item['family_str']}"
                     )
             return 0
 

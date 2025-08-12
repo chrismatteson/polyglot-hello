@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from typing import Callable, List, Optional
 from importlib.abc import Traversable
 
+from .families import family_path_for_code
+
 try:  # Python 3.9+
     from importlib.resources import files as _files
     _ir_files: Optional[Callable[[str], Traversable]] = _files
@@ -21,6 +23,7 @@ class Greeting:
     codes: List[str]
     hello: str
     hello_world: str
+    family_path: Optional[List[str]] = None
 
 
 def _read_data_text() -> str:
@@ -51,6 +54,7 @@ def _load_data() -> List[Greeting]:
     for i, row in enumerate(raw):
         codes = sorted(set([row.get("code")] + row.get("codes", [])))
         primary = row.get("code") or (codes[0] if codes else "")
+        family = family_path_for_code(primary)
         greetings.append(
             Greeting(
                 index=i,
@@ -59,6 +63,7 @@ def _load_data() -> List[Greeting]:
                 codes=codes,
                 hello=row["hello"],
                 hello_world=row["hello_world"],
+                family_path=family,
             )
         )
     return greetings
@@ -128,10 +133,29 @@ def search(query: str) -> List[Greeting]:
     q = _normalize(query)
     results: List[Greeting] = []
     for g in _all():
-        hay = " ".join([g.name, g.code] + g.codes + [g.hello, g.hello_world])
+        family_text = " ".join(g.family_path) if g.family_path else ""
+        hay = " ".join([g.name, g.code] + g.codes + [g.hello, g.hello_world, family_text])
         if q in _normalize(hay):
             results.append(g)
     return results
+
+
+def filter_by_family(family_query: str) -> List[Greeting]:
+    q = _normalize(family_query)
+    items: List[Greeting] = []
+    for g in _all():
+        if g.family_path and any(q in _normalize(part) for part in g.family_path):
+            items.append(g)
+    return items
+
+
+def filter_by_code_prefix(prefix: str) -> List[Greeting]:
+    p = _normalize(prefix)
+    items: List[Greeting] = []
+    for g in _all():
+        if _normalize(g.code).startswith(p) or any(_normalize(c).startswith(p) for c in g.codes):
+            items.append(g)
+    return items
 
 
 def _resolve(identifier: Optional[str | int]) -> Greeting:

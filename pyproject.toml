@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "polyglot-hello"
-version = "0.1.0"
+version = "0.1.2"
 description = "Hello and Hello World in 200+ languages, with simple APIs by name, code, or index."
 readme = "README.md"
 requires-python = ">=3.9"
